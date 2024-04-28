@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: . #
+      dockerfile: Dockerfile
+
+    ports:
+      - 8000:8000 # first is local host, second is docker host
+    volumes:
+      - .:/app # changes in current directory will be copied to app folder in docker container
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    # restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: django_pass # Set the MySQL root password
+      MYSQL_DATABASE: django_db # Create a database named airflow
+      MYSQL_USER: django_user # Create a user named airflow
+      MYSQL_PASSWORD: django_pass # Set the password for the airflow user
+      
+    # volumes:
+    #   - .dbdata:/var/lib/mysql
+    ports:
+      - 3307:3306
